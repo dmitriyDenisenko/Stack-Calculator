@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.util.Stack;
 
 public class Calculator {
-    static Stack<Integer> calculatorData = new Stack<>();
+    static StackCalculator<Integer> calculatorData = new StackCalculator<>();
     static boolean flag = true;
     public static void main(String[] args){
         Scanner input = new Scanner(System.in);
@@ -80,9 +80,13 @@ public class Calculator {
 
     public static void workWightOperators(String operator){
         int count;
+        int cheker = 0;
         switch (operator){
             case "+":
-                count = calculatorData.stream().mapToInt((s) -> s).sum();
+                count = 0;
+                for(int elem : calculatorData){
+                    count += elem;
+                }
                 if(!flag){
                     calculatorData.pop();
                 }
@@ -91,30 +95,50 @@ public class Calculator {
 
                 break;
             case "-":
-                count = calculatorData.stream().mapToInt((s) -> s).sum();
-                int lastNumb = calculatorData.peek();
+                count = calculatorData.peek();
+                for(int elem : calculatorData){
+                    if(cheker == 0){
+                        cheker++;
+                    } else {
+                        count -= elem;
+                    }
+
+                }
                 if(!flag){
                     calculatorData.pop();
                 }
-                calculatorData.push(lastNumb - (count - lastNumb));
-                System.out.println(lastNumb - (count - lastNumb));
+                calculatorData.push(count);
+                System.out.println(count);
                 break;
             case "*":
-                int mult =  calculatorData.stream().mapToInt(a -> a).reduce(1, (a, b) -> a * b);
+                count = calculatorData.peek();
+                for(int elem: calculatorData){
+                    if(cheker == 0){
+                        cheker++;
+                    } else{
+                        count *= elem;
+                    }
+                }
                 if(!flag){
                     calculatorData.pop();
                 }
-                calculatorData.push(mult);
-                System.out.println(mult);
+                calculatorData.push(count);
+                System.out.println(count);
                 break;
             case "/":
-                int numb = calculatorData.pop();
-                int del = calculatorData.stream().mapToInt(a -> a).reduce(1,(a,b) -> numb / b);
+                count = calculatorData.peek();
+                for(int elem : calculatorData){
+                    if(cheker == 0){
+                        cheker++;
+                    } else {
+                        count /= elem;
+                    }
+                }
                 if(!flag){
                     calculatorData.pop();
                 }
-                calculatorData.push(del);
-                System.out.println(del);
+                calculatorData.push(count);
+                System.out.println(count);
                 break;
         }
     }
